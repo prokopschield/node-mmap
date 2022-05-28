@@ -38,7 +38,10 @@ napi_value node_mmap(napi_env env, napi_callback_info info)
     int32_t readonly = 0;
 
     if (argc >= 2) {
-        napi_get_value_int32(env, argv[1], &readonly);
+        napi_get_value_bool(env, argv[1], (bool*)&readonly);
+        if (!readonly) {
+            napi_get_value_int32(env, argv[1], &readonly);
+        }
     }
 
     int fd = open(pathstr, readonly ? O_RDONLY : O_RDWR);
